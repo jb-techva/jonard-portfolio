@@ -25,14 +25,14 @@ const portraitSavePlugin = (): Plugin => ({
             const buffer = Buffer.from(base64Data, 'base64');
             
             // Save permanently across all referenced assets
-            fs.writeFileSync(path.resolve(__dirname, 'public/Castro.jpg'), buffer);
-            fs.writeFileSync(path.resolve(__dirname, 'public/profile.jpg'), buffer);
-            fs.writeFileSync(path.resolve(__dirname, 'public/Jonard.jpg'), buffer);
+            fs.writeFileSync(path.resolve(import.meta.dirname, 'public/Castro.jpg'), buffer);
+            fs.writeFileSync(path.resolve(import.meta.dirname, 'public/profile.jpg'), buffer);
+            fs.writeFileSync(path.resolve(import.meta.dirname, 'public/Jonard.jpg'), buffer);
 
-            if (fs.existsSync(path.resolve(__dirname, 'dist'))) {
-              fs.writeFileSync(path.resolve(__dirname, 'dist/Castro.jpg'), buffer);
-              fs.writeFileSync(path.resolve(__dirname, 'dist/profile.jpg'), buffer);
-              fs.writeFileSync(path.resolve(__dirname, 'dist/Jonard.jpg'), buffer);
+            if (fs.existsSync(path.resolve(import.meta.dirname, 'dist'))) {
+              fs.writeFileSync(path.resolve(import.meta.dirname, 'dist/Castro.jpg'), buffer);
+              fs.writeFileSync(path.resolve(import.meta.dirname, 'dist/profile.jpg'), buffer);
+              fs.writeFileSync(path.resolve(import.meta.dirname, 'dist/Jonard.jpg'), buffer);
             }
 
             res.setHeader('Content-Type', 'application/json');
@@ -55,14 +55,13 @@ export default defineConfig(() => {
     plugins: [react(), tailwindcss(), portraitSavePlugin()],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
+        '@': path.resolve(import.meta.dirname, '.'),
       },
     },
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
+      port: 3000,
+      host: '0.0.0.0',
       hmr: process.env.DISABLE_HMR !== 'true',
-      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
   };
